@@ -6,7 +6,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Clstialdev/War9a_App">
+  <a href="https://github.com/Clstialdev/War9a">
     <img src="assets/logo.webp" alt="Logo" width="300" height="80">
   </a>
 
@@ -16,14 +16,14 @@
     an app and a platform where all services are able to provide an algorithmically accurate queuing experience through our queuing system, while our solution focuses mainly on queuing it also provides a reservation system as well, thus incentivising businesses and individuals to use our solution.
 </p>
     <br />
-    <a href="https://github.com/Clstialdev/War9a_App"><strong>Explore the code! »</strong></a>
+    <a href="https://github.com/Clstialdev/War9a"><strong>Explore the code! »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Clstialdev/War9a_App">View Demo</a>
+    <a href="https://github.com/Clstialdev/War9a">View Demo</a>
     ·
-    <a href="https://github.com/Clstialdev/War9a_App/issues">Report Bug</a>
+    <a href="https://github.com/Clstialdev/War9a/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Clstialdev/War9a_App/issues">Request Feature</a>
+    <a href="https://github.com/Clstialdev/War9a/issues">Request Feature</a>
   
 </div>
 
@@ -57,7 +57,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="Screenshots/Design.png" alt="Design" width="900" height="390">
+<img src="War9a_App/Screenshots/Design.png" alt="Design" width="900" height="390">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -78,10 +78,10 @@
 ### Screenshots
 
 <div style="align:center; display:flex; justify-content:center; align-items:center" align="center">
-    <img src="Screenshots/1.png" alt="Logo" width="180" height="384" style="float:left;">
-    <img src="Screenshots/2.png" alt="Logo" width="180" height="384" style="float:left;">
-    <img src="Screenshots/3.png" alt="Logo" width="180" height="384" style="float:left;">
-    <img src="Screenshots/4.png" alt="Logo" width="180" height="384" style="float:left;">
+    <img src="War9a_App/Screenshots/1.png" alt="Logo" width="180" height="384" style="float:left;">
+    <img src="War9a_App/Screenshots/2.png" alt="Logo" width="180" height="384" style="float:left;">
+    <img src="War9a_App/Screenshots/3.png" alt="Logo" width="180" height="384" style="float:left;">
+    <img src="War9a_App/Screenshots/4.png" alt="Logo" width="180" height="384" style="float:left;">
   </div>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -91,21 +91,21 @@
 <details>
   <summary>Branding</summary>
   <div style="align:center; display:flex; justify-content:center; align-items:center" align="center">
-    <img src="Screenshots/Branding.png" alt="Logo" width="896" height="962" style="float:left;">
+    <img src="War9a_App/Screenshots/Branding.png" alt="Logo" width="896" height="962" style="float:left;">
   </div>
 </details>
 
 <details>
   <summary>Mobile Design</summary>
   <div style="align:center; display:flex; justify-content:center; align-items:center" align="center">
-    <img src="Screenshots/App-Design.png" alt="Logo" width="897" height="721" style="float:left;">
+    <img src="War9a_App/Screenshots/App-Design.png" alt="Logo" width="897" height="721" style="float:left;">
   </div>
 </details>
 
 <details>
   <summary>Web Design</summary>
   <div style="align:center; display:flex; justify-content:center; align-items:center" align="center">
-    <img src="Screenshots/Web-Design.png" alt="Logo" width="902" height="1217" style="float:left;">
+    <img src="War9a_App/Screenshots/Web-Design.png" alt="Logo" width="902" height="1217" style="float:left;">
   </div>
 </details>
 
@@ -132,11 +132,11 @@ To Get a Local copy of this project working on your machine we need:
 
 2. Clone the repo
    ```sh
-   git clone https://github.com/Clstialdev/War9a_App
+   git clone https://github.com/Clstialdev/War9a
    ```
 2. Change Directory to the work folder
    ```sh
-   cd War9a_App
+   cd War9a/War9a_App
    ```
 3. Install NPM packages
    ```sh
@@ -158,7 +158,7 @@ To Get a Local copy of this project working on your machine we need:
 - [...] SMS Messaging
 - [...] In App Service Chat
 
-See the [open issues](https://github.com/Clstialdev/War9a_App/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/Clstialdev/War9a/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -170,6 +170,6 @@ See the [open issues](https://github.com/Clstialdev/War9a_App/issues) for a full
 Design & App Development - [@0xD3v_eth](https://twitter.com/0xD3v_eth)
 Web Development - [@Sparpouhy](https://twitter.com/Sparpouhy)
 
-Project Link: [War9a_App](https://github.com/Clstialdev/War9a_App)
+Project Link: [War9a](https://github.com/Clstialdev/War9a)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
