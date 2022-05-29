@@ -7,7 +7,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Clstialdev/War9a">
-    <img src="assets/logo.webp" alt="Logo" width="300" height="80">
+    <img src="War9a_App/assets/logo.webp" alt="Logo" width="300" height="80">
   </a>
 
 <h3 align="center">War9a a Queuing System</h3>
