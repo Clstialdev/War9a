@@ -1,0 +1,36 @@
+#War9a App
+War9a_App/node_modules/
+War9a_App/.expo/
+War9a_App/dist/
+War9a_App/npm-debug.*
+War9a_App/*.jks
+War9a_App/*.p8
+War9a_App/*.p12
+War9a_App/*.key
+War9a_App/*.mobileprovision
+War9a_App/*.orig.*
+War9a_App/web-build/
+War9a_App/app.json
+War9a_App/google-services.json
+# macOS
+War9a_App/.DS_Store
+
+
+#War9a Website
+# dependencies
+War9a_Web/node_modules
+War9a_Web/.pnp
+War9a_Web/.pnp.js
+# testing
+War9a_Web/coverage
+# production
+War9a_Web/build
+# misc
+War9a_Web/.DS_Store
+War9a_Web/.env.local
+War9a_Web/.env.development.local
+War9a_Web/.env.test.local
+War9a_Web/.env.production.local
+War9a_Web/npm-debug.log*
+War9a_Web/yarn-debug.log*
+War9a_Web/yarn-error.log*

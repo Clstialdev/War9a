@@ -1,0 +1,20 @@
+Profile, done. -> make buttons functional
+Invite Friends, done.
+Make MainHub Scrollable, done.
+Change Hamburger Menu to Work Mode Icon, done.
+Added Tags to services, done.
+Joined Date, done.
+Fix Details, done.
+Work Mode, done.
+Cant join queue if service is found from search, done.
+Cant open service from favorited tab, done.
+Add TPC, done.
+Fix Header Tag buttons positioning, done.
+Fix Android shadows, done.
+Notifications, done.
+Advanced TPC Notifications, done.
+
+Add Multiple queue lines per service,
+Fix 20+ in Queue,
+Open and close date,
+Add Rating,
