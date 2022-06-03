@@ -18,7 +18,7 @@ interface Props {
     expoPushToken: string,
   }
 
-export const SeeAll:React.FC<Props> = ({db, userUid, userName, expoPushToken}) => {
+export const SeeAll:React.FC<Props> = ({db, userUid, userName, expoPushToken}) => { //screen to show us all the business's available
 
     const [services, setServices] = useState<any>();
 

@@ -24,7 +24,7 @@ export const ServiceDetails:React.FC<Props> = ({navigation, route}) => {
     const phoneNumber = route.params.serviceData.phoneNumber ? route.params.serviceData.phoneNumber : "+18423795338";
 
 
-    const onPressCall = () => {
+    const onPressCall = () => { //executed when the call business button is pressed
     const url = Platform.OS === "android" ? `tel:${phoneNumber}` : `telprompt:${phoneNumber}`
 	Linking.canOpenURL(url)
 		.then((supported) => {
@@ -38,7 +38,7 @@ export const ServiceDetails:React.FC<Props> = ({navigation, route}) => {
 		});
     }
 
-    const creationDate = route.params.serviceData.created.toDate().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const creationDate = route.params.serviceData.created.toDate().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); //translating the creation date to latin rather than a number
 
     const {language} = useContext(LanguageContext);
     return(

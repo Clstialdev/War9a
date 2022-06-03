@@ -30,7 +30,7 @@ export const ServiceQueue:React.FC<Props> = ({navigation, route}) => {
     
     
 
-    const getQueue = async() => {
+    const getQueue = async() => { //gets the queue details from the database
 
         const unsub = onSnapshot(doc(route.params.db, "services2", route.params.serviceId), (doc) => {
             
@@ -50,7 +50,7 @@ export const ServiceQueue:React.FC<Props> = ({navigation, route}) => {
         }
     },[queue]);
 
-    useEffect(()=>{
+    useEffect(()=>{ //we check for whether the user is already queued in any of the kiosks a service might offer
             let found = -1;
             if(docData && docData.queued ){
                 docData.queued.map((set:any, setIndex:number)=>set.data.map((obj:any, i:number)=> obj.uid === route.params.userUid ? found=setIndex : console.log("not found in queue")))

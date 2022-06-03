@@ -62,15 +62,16 @@ import { SeeAll } from "./Screens/SeeAll";
 import { Map } from "./Screens/Map";
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); //State of whether the app is loading or not
 
-  const [user, setUser] = useState<User>();
-  const [userData, setUserData] = useState<DocumentData>();
+  const [user, setUser] = useState<User>(); //state for the user object from google auth
+  const [userData, setUserData] = useState<DocumentData>(); //state of user DB data
   const [serviceOwned, setServiceOwned] = useState<undefined | string>(
     undefined
-  );
+  ); //state for whether user has a business or not
 
   const firebaseConfig = {
+    //firebase API keys
     apiKey: (Constants as any).manifest.extra.FIREBASE_CONFIG_APIKEY,
     authDomain: (Constants as any).manifest.extra.FIREBASE_CONFIG_AUTHDOMAIN,
     projectId: (Constants as any).manifest.extra.FIREBASE_CONFIG_PROJECTID,
@@ -81,12 +82,14 @@ export default function App() {
     appId: (Constants as any).manifest.extra.FIREBASE_CONFIG_APPID,
   };
 
-  const Firebase = initializeApp(firebaseConfig);
+  const Firebase = initializeApp(firebaseConfig); //initialising our firebase connection with our config object
 
-  const db = getFirestore(Firebase);
+  const db = getFirestore(Firebase); //getting our firebase firestore (Database) object
 
   const addService = async (registration: serviceRegistration) => {
+    //function for adding the service to database
     if (user) {
+      //if user exists /is authenticated
       const docRef = await addDoc(collection(db, "services2"), {
         name: registration.name,
         nameAsArray: registration.nameAsArray,
@@ -144,24 +147,29 @@ export default function App() {
   }, [user]);
 
   const handleUserAfterAuth = async () => {
+    //this handles what happens after authentication
     if (user) {
-      const docSnap = await getDoc(doc(db, "users2", user.uid));
-
+      //if user exists
+      const docSnap = await getDoc(doc(db, "users2", user.uid)); //we fetch the user db data
       if (docSnap.exists()) {
-        setUserData(docSnap.data());
+        //if data in db exists
+        console.log("User found, Document data:", docSnap.data()); //we log that we did find the user
+        setUserData(docSnap.data()); //we set our userData state to the fetched data
         if (docSnap.data().language !== undefined) {
-          let language = docSnap.data().language;
-          language === "french"
-            ? setLanguage(Thesaurus.french)
-            : language === "arabic"
-            ? setLanguage(Thesaurus.arabic)
-            : setLanguage(Thesaurus.english);
+          //if user has chosen a language
+          let language = docSnap.data().language; //we get the language from his db data
+          language === "french" // if his language is set to french
+            ? setLanguage(Thesaurus.french) //we set the language of the app to french
+            : language === "arabic" //else if arabic
+            ? setLanguage(Thesaurus.arabic) //we set the language of the app to arabic
+            : setLanguage(Thesaurus.english); //else we set the language of the app to english by default
         }
-        console.log("User found, Document data:", docSnap.data());
         if (docSnap.data().service_provider) {
-          setServiceOwned(docSnap.data().service_owned);
+          //we check if this user is a business owner
+          setServiceOwned(docSnap.data().service_owned); //we fetch the ID of his business
         }
       } else {
+        //if user is not in our database we add him to the database with default values using a JSON object
         console.log("No user document found!");
         const docRef = await setDoc(doc(db, "users2", user.uid), {
           name: user.displayName,
@@ -185,6 +193,7 @@ export default function App() {
   };
 
   const Glogin = async () => {
+    //allows us to sign in with google
     try {
       //await GoogleSignIn.askForPlayServicesAsync();
       const result = await Google.logInAsync({
@@ -223,6 +232,7 @@ export default function App() {
   };
 
   const GLogOut = (onSuccess: () => void) => {
+    //allows us to logout
     const auth = getAuth();
     signOut(auth)
       .then(() => {
@@ -237,7 +247,7 @@ export default function App() {
       });
   };
 
-  LogBox.ignoreAllLogs(true);
+  LogBox.ignoreAllLogs(true); //we're ignoring some logs from the expo simulator while developing the app
 
   //Notification settings start here
   Notifications.setNotificationHandler({
@@ -248,7 +258,7 @@ export default function App() {
     }),
   });
 
-  const [expoPushToken, setExpoPushToken] = useState("noToken");
+  const [expoPushToken, setExpoPushToken] = useState("noToken"); //default state of the push notification token
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -261,19 +271,20 @@ export default function App() {
       }
     });
 
-    // This listener is fired whenever a notification is received while the app is foregrounded
+    // This listener is called whenever a notification is received
     (notificationListener as any).current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification as any);
       });
 
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    // This listener is called when a user taps a notification
     (responseListener as any).current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
       });
 
     return () => {
+      //then we remove the subscription for the notification
       Notifications.removeNotificationSubscription(
         (notificationListener as any).current
       );
@@ -283,9 +294,10 @@ export default function App() {
     };
   }, []);
 
-  const [language, setLanguage] = useState<any>(Thesaurus.english);
+  const [language, setLanguage] = useState<any>(Thesaurus.english); //by default the app language is set to english
 
   const handleChangeLanguage = (language: languages) => {
+    //function to handle language changes, we pass this to the settings page later on
     switch (language) {
       case "english":
         setLanguage(Thesaurus.english);
@@ -303,8 +315,10 @@ export default function App() {
   };
 
   if (!fontsLoaded) {
+    // we want to make sure the fonts are loaded before we show the app welcome screen
     return <AppLoading />;
   } else {
+    // here is the navigation stack of our app and the pages it allows us to access
     return (
       <View style={styles.app}>
         <LanguageContext.Provider value={{ language, handleChangeLanguage }}>

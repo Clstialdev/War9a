@@ -11,7 +11,7 @@ import { Timestamp } from 'firebase/firestore';
 import { RoundTag } from '../components/Buttons/RoundTag';
 import { Map } from './Map';
 
-interface Props {
+interface Props { //sets the rules for the RegisterService component and the props it needs to work
     userUid: string,
     addService: (registration:serviceRegistration) => void;
 }
@@ -62,16 +62,16 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
         setLanes(lanes);
     }
 
-    useEffect(()=>{
+    useEffect(()=>{ //we are setting up templates for services where services of type "other" or "doctors" should have lanes / kiosks and a queue for each lane/kiosk
         if(laneTypes!==[]){
             if(tags==="other" || tags==="doctor"){
                 let queuedTemplate:Array<any> = [];
                 
                 laneTypes.map(()=>{
-                    queuedTemplate.push({data:[]})
+                    queuedTemplate.push({data:[]}) //we're filling the queuedTemplate object with empty arrays for each lane, 3 lanes = 3 empty arrays as the default value
                 })
     
-                setQueued(queuedTemplate);
+                setQueued(queuedTemplate); //finally we're setting the architecture of the queue to queuedTemplate
             }
         }
     },[laneTypes])
@@ -83,9 +83,9 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
     const [uploading, setUploading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { //function that handles getting the permissions for accessing the image gallery of the phone
     (async () => {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== 'web') { //we make sure expo is running on a mobile phone
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
@@ -111,7 +111,7 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
     }
   };
 
-  const uploadImage = async() => {
+  const uploadImage = async() => { //uploading the image to the firebase storage
 
       const blob = await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -166,12 +166,12 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
   
   const addToDatabase = () =>{
     if(name.trim() !== "" && address.trim() !== "" && city.trim() !== "" && description.trim() !== "" 
-    && image && downloadURL){
-        let nameAsArray:Array<string> = [];
-        const nameAsCharacters:Array<string> = [...name.toLowerCase()];
+    && image && downloadURL){ // after we make sure all the fields are not empty
+        let nameAsArray:Array<string> = []; //initialise empty array
+        const nameAsCharacters:Array<string> = [...name.toLowerCase()]; //spread array of all name characters
         
         let x = 0;
-        for(let i=0; i<nameAsCharacters.length; i++){
+        for(let i=0; i<nameAsCharacters.length; i++){ //creating the name array for seraching engine optimization
             if(i>0){
                 if(nameAsCharacters[i] !== " "){
                     nameAsArray.push(nameAsArray[x-1] + nameAsCharacters[i]);
@@ -188,10 +188,11 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
             }
             x++;
         }
+        //example input to output of the past function is as follows
+        //input="Fast Food" // output = ["f","fa","fas","fast","f","fo","foo","food"]
+        nameAsArray.push(name.toLowerCase()); //we add the full name to the array, final output = ["f","fa","fas","fast","f","fo","foo","food", "fastfood"]
 
-        nameAsArray.push(name.toLowerCase());
-
-        let registration:serviceRegistration = {
+        let registration:serviceRegistration = { //registration is of type serviceRegistration which makes sure the data pushed into this object is correct in terms of type of variable
             name: name,
             nameAsArray: nameAsArray,
             address: address,
@@ -212,9 +213,9 @@ export const RegisterService:React.FC<Props> = ({userUid, addService}) => {
             rating: 3,
             tpc: 0
         }
-        addService(registration);
-        setSubmitted(true);
-        console.log(downloadURL);
+        addService(registration); //we call the addService function that adds the data from the registration object to the database using firebase functions
+        setSubmitted(true); //we set the state to submitted so we know that everything went smoothly
+        console.log(downloadURL); //we log the link to the image just for debugging connectivity performances.
     }
     else{
         alert("Error: Must fill all fields!")

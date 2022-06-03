@@ -11,16 +11,16 @@ import { useNavigation } from '@react-navigation/native';
 import { LanguageContext } from '../components/Languages';
 
 
-interface WelcomeProps {
-  Glogin: () => Promise<boolean>,
-  user: User | undefined,
+interface WelcomeProps { //this is a typescript interface for our Welcome screen object that sets strict rules for what props/arguments it needs to function
+  Glogin: () => Promise<boolean>, //it needs the Google login function 
+  user: User | undefined, //it also needs access to the user state whether it exists or is undefined
 }
 
 export const Welcome:React.FC<WelcomeProps> = ({Glogin, user}) => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation(); //getting the navigation object to allow us to manipulate the navigation stack
 
-  const [signedIn, SetSignedIn] = useState(user ? true : false);
+  const [signedIn, SetSignedIn] = useState(user ? true : false); //we check if the user is signed in or not
 
   useEffect(()=>{
     SetSignedIn(user ? true : false);
@@ -46,7 +46,7 @@ export const Welcome:React.FC<WelcomeProps> = ({Glogin, user}) => {
           <Text style={styles.title}>{language.Welcome.title}</Text>
           <Text style={styles.subtitle}>{language.Welcome.description}</Text>
         </View>
-        {!signedIn ?
+        {!signedIn ? //if user is not signed in we show a sign in button else we show a "welcome continue to the app" btn
         <UIButton text={language.Welcome.googleBtn} icon="logo-google" fontWeight={600} mb={30} pos="absolute" b={10} press={handleGoogleAuth}/>
          : 
         <UIButton text={language.Welcome.button} fontWeight={600} mb={30} pos="absolute" b={10} press={()=>navigation.navigate('MainHub')}/>

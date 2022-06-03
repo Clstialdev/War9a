@@ -37,7 +37,7 @@ export const MyQueues:React.FC<Props> = ({db, userUid, userName, expoPushToken})
         setServices(docsArray);
       }
 
-      useEffect(()=>{
+      useEffect(()=>{ //this function only runs once everytime we go to the My Queues screen
         if(!services){
             getQueues();
         }

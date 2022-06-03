@@ -49,7 +49,7 @@ export const QrScanner:React.FC<Props> = ({db, userUid, userName, expoPushToken}
     }
   },[serviceId])
 
-  useEffect(()=>{
+  useEffect(()=>{ //this function is automatically triggered everytime the service variable is changed.
     if(service!==undefined){
         // joinService(serviceId);
         if(Platform.OS==="ios"){
@@ -73,7 +73,7 @@ export const QrScanner:React.FC<Props> = ({db, userUid, userName, expoPushToken}
     }
   }
 
-  const joinService = async(serviceId:string) =>{
+  const joinService = async(serviceId:string) =>{ 
     const serviceDataRef = doc(db, "services2", serviceId);
     await updateDoc(serviceDataRef, {
         queued: arrayUnion(userUid),

@@ -50,7 +50,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
                 //Notify the first bunch of people to be present to fill the waiting seats and work lanes
                 for(let i=0; i<=queue.length && i<lanes+3; i++){
                     if(queue[i] !==undefined && queue[i].pushToken.split(" ")[0] !== "noToken" && !tempPresentNotified.includes(queue[i].pushToken)){
-                        axios.post('https://exp.host/--/api/v2/push/send', {
+                        axios.post('https://exp.host/--/api/v2/push/send', { //send notification through the expo API
                             to: queue[i].pushToken,
                             title: 'War9a',
                             body: "Your queue is closer, Be present at the service location now!"
@@ -76,7 +76,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
                            body = "Be present at the service location in " + (time/60).toFixed(1) + "hrs";
                         }
 
-                        axios.post('https://exp.host/--/api/v2/push/send', {
+                        axios.post('https://exp.host/--/api/v2/push/send', { //send notification through the expo API
                             to: queue[i].pushToken,
                             title: 'War9a',
                             body: body
@@ -110,7 +110,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
     },[serviceData])
     
     
-    const getInitialData = async() => {
+    const getInitialData = async() => { //we're getting the business DB data
         
 
         const unsub = onSnapshot(doc(db, "services2", serviceOwned.toString().trim()), (doc) => {
@@ -238,7 +238,8 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
         setQueue(serviceData.queued[currentQueue].data);
     }
 
-    const addToQueue = () =>{
+
+    const addToQueue = () =>{ //executed when the + button is pressed
         Alert.alert('Add to Queue?', 'Do you want to add to queue?', [
             {
               text: 'Cancel',
@@ -249,7 +250,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
           ]);  
     }
 
-    const removeFromQueue = () =>{
+    const removeFromQueue = () =>{ //executed when the - button is pressed
         Alert.alert('Remove From Queue?', 'Do you want to remove from queue?', [
             {
               text: 'Cancel',

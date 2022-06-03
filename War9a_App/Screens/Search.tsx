@@ -17,7 +17,7 @@ interface Props {
     route: Route,
 }
 
-export const Search:React.FC<Props> = ({route}) => {
+export const Search:React.FC<Props> = ({route}) => { //search screen allows us to search for businesses
 
     const value = route ? route.params.value : "";
     const [search, onChangeSearch] = useState(value);
@@ -27,8 +27,8 @@ export const Search:React.FC<Props> = ({route}) => {
 
     const [results, setResults] = useState<any>();
 
-    const getResults = async() => {
-        if(!route.params.filter){
+    const getResults = async() => { //gets the search results
+        if(!route.params.filter){ //if user hasn't set a filter we use the words he used in the search bar for the query
             const Query = query(collection(route.params.db, "services2"), where("nameAsArray", "array-contains", search.trim().toLowerCase()));
             const querySnapshot = await getDocs(Query);
     
@@ -39,7 +39,7 @@ export const Search:React.FC<Props> = ({route}) => {
             });
             setResults(docsArray)
         }
-        else{
+        else{ //else we use the filter he set to find results
             const Query = query(collection(route.params.db, "services2"), where("tags", "array-contains", route.params.filter.toLowerCase()));
             const querySnapshot = await getDocs(Query);
             
