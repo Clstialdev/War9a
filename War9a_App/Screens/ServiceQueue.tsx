@@ -71,37 +71,23 @@ export const ServiceQueue:React.FC<Props> = ({navigation, route}) => {
     const expoPushToken = route.params.expoPushToken !== "noToken" ? route.params.expoPushToken : "noToken #" + route.params.userUid;
 
     const enterQueue = async() => {
-        const serviceDataRef = doc(route.params.db, "services2", route.params.serviceId);
-        const userDataRef = doc(route.params.db, "users2", route.params.userUid);
+        const serviceDataRef = doc(route.params.db, "services2", route.params.serviceId); //fetch service Data
+        const userDataRef = doc(route.params.db, "users2", route.params.userUid); //fetch user data
 
-            let tempTypeQueues = docData.queued;
+            let tempTypeQueues = docData.queued; //get queue
             tempTypeQueues[currentQueue].data.push({uid:route.params.userUid,name:route.params.userName,pushToken:expoPushToken});
-
-
-            await updateDoc(serviceDataRef, {
-                queued: tempTypeQueues
-            });
-    
-            await updateDoc(userDataRef, {
-                queues: arrayUnion(route.params.serviceId)
-            });
-
-            setInQueue(true);
-
-            // setQueue(docData.queued[currentQueue]);
-        
-
+             
+            await updateDoc(serviceDataRef, { queued: tempTypeQueues }); //request to update the queue
+            await updateDoc(userDataRef, { queues: arrayUnion(route.params.serviceId) }); //request to update the user data
+            setInQueue(true); //this runs only if the queue update request is accepted
+        //we inform the business owner that the client has joined the queue.
         axios.post('https://exp.host/--/api/v2/push/send', {
             to: route.params.serviceData.expoPushToken,
             title: "War9a: " + route.params.serviceData.name,
             body: "Someone Joined your queue"
           })
-          .then(function (response:any) {
-            console.log(response);
-          })
-          .catch(function (error:any) {
-            console.log(error);
-          });
+          .then(function (response:any) { console.log(response); })
+          .catch(function (error:any) { console.log(error);});
     };
 
     const leaveQueue = async() => {

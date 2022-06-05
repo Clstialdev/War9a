@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, doc, Firestore, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, doc, Firestore, getDoc, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, ScrollView, } from 'react-native';
 import axios from "axios";
@@ -8,6 +8,15 @@ import { QueueTicket } from '../components/Service/QueueTicket';
 import { Shadow } from '../components/UIComponents/Shadow';
 import { Header } from '../components/WorkMode/Header';
 import { LaneTypes } from '../components/Service/LaneTypes';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+    MenuProvider,
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+  } from 'react-native-popup-menu';
+  
 
 interface WorkModeProps {
     db: Firestore,
@@ -50,7 +59,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
                 //Notify the first bunch of people to be present to fill the waiting seats and work lanes
                 for(let i=0; i<=queue.length && i<lanes+3; i++){
                     if(queue[i] !==undefined && queue[i].pushToken.split(" ")[0] !== "noToken" && !tempPresentNotified.includes(queue[i].pushToken)){
-                        axios.post('https://exp.host/--/api/v2/push/send', { //send notification through the expo API
+                        axios.post('https://exp.host/--/api/v2/push/send', {
                             to: queue[i].pushToken,
                             title: 'War9a',
                             body: "Your queue is closer, Be present at the service location now!"
@@ -76,7 +85,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
                            body = "Be present at the service location in " + (time/60).toFixed(1) + "hrs";
                         }
 
-                        axios.post('https://exp.host/--/api/v2/push/send', { //send notification through the expo API
+                        axios.post('https://exp.host/--/api/v2/push/send', {
                             to: queue[i].pushToken,
                             title: 'War9a',
                             body: body
@@ -110,7 +119,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
     },[serviceData])
     
     
-    const getInitialData = async() => { //we're getting the business DB data
+    const getInitialData = async() => {
         
 
         const unsub = onSnapshot(doc(db, "services2", serviceOwned.toString().trim()), (doc) => {
@@ -238,8 +247,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
         setQueue(serviceData.queued[currentQueue].data);
     }
 
-
-    const addToQueue = () =>{ //executed when the + button is pressed
+    const addToQueue = () =>{
         Alert.alert('Add to Queue?', 'Do you want to add to queue?', [
             {
               text: 'Cancel',
@@ -250,7 +258,7 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
           ]);  
     }
 
-    const removeFromQueue = () =>{ //executed when the - button is pressed
+    const removeFromQueue = () =>{
         Alert.alert('Remove From Queue?', 'Do you want to remove from queue?', [
             {
               text: 'Cancel',
@@ -273,6 +281,79 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
         setCurrentQueue(index);
     }
 
+    const v2RemoveBtn = async(userIndex:number) => {
+        const serviceDataRef = doc(db, "services2", serviceOwned.toString());
+        let tempQueued = serviceData.queued;    
+            tempQueued[currentQueue].data = tempQueued[currentQueue].data.filter(function(f:any) { return f.uid !== tempQueued[currentQueue].data[userIndex].uid });
+
+        await updateDoc(serviceDataRef, {
+            queued: tempQueued,
+        });
+        
+        
+        if(queue[userIndex].uid.split(" ")[0] !== "Client"){
+            const userDataRef = doc(db, "users2", queue[userIndex].uid);
+            await updateDoc(userDataRef, {
+                queues: arrayRemove(serviceOwned.toString())
+            });
+        }
+         //tell the person that they just got out of queue
+         if(queue[userIndex] !== undefined && queue[userIndex].pushToken.split(" ")[0] !== "noToken"){
+            // console.log(serviceData.queued[currentQueue].pushTokens[0])
+            axios.post('https://exp.host/--/api/v2/push/send', {
+                to: queue[userIndex].pushToken,
+                title: 'War9a',
+                body: "Owner removed you from queue"
+            })
+            .then(function (response:any) {
+                // console.log(response);
+            })
+            .catch(function (error:any) {
+                // console.log(error);
+            });
+        }
+        setQueue(serviceData.queued[currentQueue].data);
+    }
+
+    const deleteFromQueue = (userIndex:number) =>{
+        Alert.alert('Remove From Queue?', 'Do you want to remove from queue?', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            { text: 'Yes', onPress: () => v2RemoveBtn(userIndex) },
+          ]);     
+    }
+
+    const reportUser = async(userIndex:number) => {
+        v2RemoveBtn(userIndex);
+        if(queue[userIndex].uid.split(" ")[0] !== "Client"){
+            const userDataRef = doc(db, "users2", queue[userIndex].uid);
+            await updateDoc(userDataRef, {
+                reports: increment(+1)
+            });
+        }
+         //tell the person that they just got reported.
+         if(queue[userIndex] !== undefined && queue[userIndex].pushToken.split(" ")[0] !== "noToken"){
+            // console.log(serviceData.queued[currentQueue].pushTokens[0])
+            axios.post('https://exp.host/--/api/v2/push/send', {
+                to: queue[userIndex].pushToken,
+                title: 'War9a',
+                body: "You've been reported!"
+            })
+            .then(function (response:any) {
+                // console.log(response);
+            })
+            .catch(function (error:any) {
+                // console.log(error);
+            });
+        }
+        setQueue(serviceData.queued[currentQueue].data);
+    }
+
+
+
     return(
         <View>
             <Header serviceName={serviceName} queueLength={queue !== undefined ? queue.length : 0} addToQueue={addToQueue} removeFromQueue={removeFromQueue}/>
@@ -286,6 +367,8 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
             </View>
 
             
+
+            
             {
                 !serviceData || serviceData &&  queue!==undefined && queue.length === 0 ?
                     <View style={{ marginTop:laneTypesLength !== 0 ? 0 : -35, minHeight: laneTypesLength !== 0 ? "55%" : "65%",}}>
@@ -294,7 +377,23 @@ export const WorkMode:React.FC<WorkModeProps> = ({db, userUid, serviceOwned}) =>
                 :
                 <ScrollView style={{display: 'flex', height: '55%', maxHeight: '55%', marginTop: 20,}}>
                     {queue !== undefined ? queue.map((obj:any, i:number) => 
-                            <QueueTicket key={i} index={i+1} color="#6767CD" userName={obj.name}/>
+                                <MenuProvider >
+                                    <View>
+                                    <Menu>
+                                        <MenuTrigger triggerOnLongPress={true}>
+                                            <QueueTicket key={i} index={i+1} color="#6767CD" userName={obj.name}/>
+                                        </MenuTrigger>
+                                        <MenuOptions>
+                                        <MenuOption onSelect={() => deleteFromQueue(i)}>
+                                            <Text>Remove user</Text>
+                                        </MenuOption>
+                                        <MenuOption onSelect={() => reportUser(i)}>
+                                            <Text style={{ color: 'red' }}>{`Report user`}</Text>
+                                        </MenuOption>
+                                        </MenuOptions>
+                                    </Menu>
+                                    </View>
+                                </MenuProvider>
                         ) : <View/>}
                 </ScrollView>}
 
