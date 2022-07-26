@@ -167,9 +167,6 @@ See the [open issues](https://github.com/Clstialdev/War9a/issues) for a full lis
 <!-- CONTACT -->
 ## Contact
 
-Design & App Development - [@0xD3v_eth](https://twitter.com/0xD3v_eth)
-Web Development - [@Sparpouhy](https://twitter.com/Sparpouhy)
-
 Project Link: [War9a](https://github.com/Clstialdev/War9a)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
